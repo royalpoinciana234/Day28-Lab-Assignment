@@ -287,11 +287,18 @@ cp .env.example .env
 
 ### 4. Deploy Prefect Flows
 
+Chạy deployment script bên trong prefect-worker container (đã có flow code mounted và PREFECT_API_URL đúng):
+
 ```bash
-cd prefect/flows
-pip install -r requirements.txt
-python kafka_to_delta.py
+docker exec day28-lab-assignment-prefect-worker-1 \
+  pip install kafka-python pandas -q
+
+docker exec day28-lab-assignment-prefect-worker-1 \
+  python /opt/prefect/flows/kafka_to_delta.py
 ```
+
+Kiểm tra deployment trên Prefect UI: http://localhost:4200 → Deployments → `kafka-to-delta`  
+Flow sẽ tự chạy theo cron `*/5 * * * *` (mỗi 5 phút).
 
 ### 5. Ingest Data vào Kafka
 
